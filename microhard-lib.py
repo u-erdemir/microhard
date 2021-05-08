@@ -25,11 +25,16 @@ class Microhard():
         self.tn.write(b"AT+MWSTATUS\n")
         data = self.tn.read_until(b"OK")
         dec = data.decode('ascii').split('\r\n')
-        freq = dec[7]
-        self.frequency = 1
+        self.frequency = int(dec[7].split(' ')[13])
+        self.tx_power = int(dec[8].split(' ')[15])
+        self.rx_byte = int(dec[11].split(" ")[10].split("B")[0])
+        self.tx_byte = int(dec[13].split(" ")[9].split("B")[0])
         return dec
 
 a = Microhard("192.168.168.3","admin","hisar123")
 data = a.get_status()
-frequency = data[7]
-print(frequency)
+
+print(a.frequency)
+print(a.tx_power)
+print(data[13].split(" ")[9].split("B")[0])
+# print(data[13].split(" "))

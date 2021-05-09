@@ -37,16 +37,19 @@ class Microhard():
         return dec
     
     def radio_on(self):
-        asd = True
-        return asd
+        self.tn.write(b"AT+MWRADIO=1\n")
+        self.tn.read_until(b"OK")
+        return True
         
     def radio_off(self):
-        asd = True
-        return asd
+        self.tn.write(b"AT+MWRADIO=0\n")
+        self.tn.read_until(b"OK")
+        return True
     
-    def set_frequency(self):
-        asd = True
-        return asd
+    def set_frequency(self): #Extra parameter need to be added to set frequency
+        self.tn.write(b"AT+MWFREQ900=13\n")
+        self.tn.read_until(b"OK")
+        return True
     
     def get_frequency(self):
         asd = True

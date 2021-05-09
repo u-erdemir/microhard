@@ -47,13 +47,20 @@ class Microhard():
         return True
     
     def set_frequency(self, freq): #Extra parameter need to be added to set frequency
-        self.tn.write(b"AT+MWFREQ900=freq\n")
+        # Must be in range between 906 and 924
+        if freq > 924 or freq < 906:
+            print("Frequency must be in range: [906,924]")
+            # raise ValueError
+            return False
+        self.frequency = freq
+        data = int(freq - 902)
+        cmd = "AT+MWFREQ900="+str(data)+"\n"
+        self.tn.write(cmd.encode('ascii'))
         self.tn.read_until(b"OK")
         return True
     
     def get_frequency(self):
-        asd = True
-        return asd
+        return self.frequency
     
     def reboot(self):
         # Attention !!! Reboot needs reconnection
@@ -62,8 +69,9 @@ class Microhard():
     
     def get_snr(self):
         self.tn.write(b"AT+MWSNR\n") 
-        self.tn.read_until(b"OK")
-        return True
+        data = self.tn.read_until(b"OK")
+        dec = data.decode('ascii').split('\r\n')
+        return dec
     
     def get_datarate(self):
         asd = True
@@ -80,13 +88,10 @@ class Microhard():
         return True
     
     def get_txpower(self):
-        asd = True
-        return True
+        return self.tx_power
     
 a = Microhard("192.168.168.3","admin","hisar123")
 data = a.get_status()
 
-print(a.frequency)
-print(a.tx_power)
-print(data[13].split(" ")[9].split("B")[0])
-print(data[13].split(" "))
+print(a.get_snr())
+print(a.get_status())

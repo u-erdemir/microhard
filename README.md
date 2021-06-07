@@ -1,1 +1,2 @@
-Microhard pDDL924 - Telnet connection library
+Microhard pDDL900 - Telnet connection library
+
